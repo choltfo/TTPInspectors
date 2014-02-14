@@ -21,8 +21,8 @@ public class CampaignEditor : EditorWindow {
 	void OnGUI() {
 		CD = (CampaignDisplay)EditorGUILayout.ObjectField("Campaign display:",CD, typeof(CampaignDisplay));
 
-		if (CD == null)
-						return;
+		if (CD == null) return;
+
 		c = CD.campaign;
 
 		GUILayout.Label ("Missions in this campaign:");
@@ -42,6 +42,7 @@ public class CampaignEditor : EditorWindow {
 			for (int i = 0; i < m.Length; i++) {
 				m[i] = c.missions[i];
 			}
+			c.missions[c.missions.Length - 1] = new Mission();
 			c.missions = m;
 		}
 		GUI.enabled = true;
@@ -68,20 +69,26 @@ public class CampaignEditor : EditorWindow {
 		GUILayout.Space(15);
 		GUILayout.Label ("Objectives in this mission:");
 
+
+
+
 		if (GUILayout.Button ("Add objective")) {
 			if (getOBJfromSel() != null) {
-				Objective[] o = new Objective[c.missions.Length + 1];
-				if (c.missions.Length > 0) {
-					for (int i = 0; i < m.objectives.Length; i++) {
-						o [i] = m.objectives [i];
-					}
+				Objective[] o = new Objective[c.missions.Length+1]; // Hmmm....
+				for (int i = 0; i < m.objectives.Length; i++) {
+					o [i] = m.objectives [i];
 				}
+				o[o.Length-1] = getOBJfromSel();
 				m.objectives = o;
-				m.objectives [m.objectives.Length - 1] = getOBJfromSel();
+			} else {
+				Debug.Log("In order to add an objective, you must have one highlighted in scene or hiearchy view.");
 			}
 		}
 
-		GUI.enabled = m.objectives.Length > 0;
+
+
+
+		GUI.enabled = m.objectives.Length != 0;
 		if (GUILayout.Button ("Remove objective")) {
 			Objective[] o = new Objective[m.objectives.Length-1];
 			for (int i = 0; i < o.Length; i++) {
@@ -90,6 +97,8 @@ public class CampaignEditor : EditorWindow {
 			m.objectives = o;
 		}
 		GUI.enabled = true;
+
+		GUILayout.EndHorizontal ();
 
 		if (m != null && m.objectives != null) {
 			for (int i = 0; i < m.objectives.Length; i++) {
@@ -100,7 +109,7 @@ public class CampaignEditor : EditorWindow {
 	}
 
 	public void drawObjective (Objective o) {
-		GUILayout.Label ("THIS IS AN OBJECTIVE PLACEHOLDER");
+		GUILayout.Label (o.objectiveName +" @ "+o.name); 
 	}
 	
 		// Custom GUILayout progress bar.
