@@ -14,7 +14,7 @@ public class CampaignEditor : EditorWindow {
 	public static void ShowWindow() {
 		//Show existing window instance. If one doesn't exist, make one.
 		EditorWindow.GetWindow(typeof(CampaignEditor));
-		
+	
 	}
 
 
@@ -114,17 +114,25 @@ public class CampaignEditor : EditorWindow {
 
 		if (m != null && m.objectives != null) {
 			for (int i = 0; i < m.objectives.Length; i++) {
-				drawObjective(m.objectives[i]);
+				drawObjective(m.objectives[i], i);
 			}
 		}
-		EditorUtility.SetDirty (CD);
+		GUILayout.Space(10);
+		if (GUI.changed) EditorUtility.SetDirty (CD);
 	}
 
-	public void drawObjective (Objective o) {
-		if (o != null)
-			GUILayout.Label (o.objectiveName + " @ " + o.name);
-		else
+	public void drawObjective (Objective o, int ind) {
+		if (o != null) {
+			GUILayout.Space(5);
+			GUILayout.Label("Objective "+(ind+1)+":");
+			GUILayout.BeginHorizontal ();
+			o.objectiveName = GUILayout.TextField(o.objectiveName);
+			GUILayout.Label (" @ " + o.name);
+			GUILayout.EndHorizontal();
+			if (GUI.changed) EditorUtility.SetDirty (o);
+		} else {
 			GUILayout.Label ("NULL OBJECTIVE");
+		}
 	}
 	
 		// Custom GUILayout progress bar.
