@@ -76,10 +76,14 @@ public class CampaignEditor : EditorWindow {
 			if (getOBJfromSel() != null) {
 				Debug.Log("Attempting to add objective...");
 				
-				Objective[] o = new Objective[c.missions.Length+1];
-				for (int i = 0; i < m.objectives.Length; i++) {
-					o [i] = m.objectives [i];
+				Objective[] o = new Objective[m.objectives.Length+1]; // This sometimes doesn't function properly.
+
+				if (o.Length != 1) {
+					for (int i = 0; i < m.objectives.Length; i++) {
+						o [i] = m.objectives [i];
+					}
 				}
+
 				m.objectives = (Objective[])o.Clone();
 				m.objectives[m.objectives.Length-1] = getOBJfromSel();
 				Debug.Log("Done adding objective " +
